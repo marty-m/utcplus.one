@@ -6,7 +6,7 @@ import Footer from '@/components/footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'UTC+1 Clothing',
+  title: 'UTC+1',
   description: 'streetwear brand from Sweden. desgining since 2022.',
 }
 
