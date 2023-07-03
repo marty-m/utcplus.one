@@ -1,5 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  daisyui: {
+    themes: [
+      {
+        cmyk: {
+          ...require("daisyui/src/theming/themes")["[data-theme=cmyk]"],
+          "--rounded-btn": "0.1rem",
+          "--rounded-box": "0.1rem",
+          "neutral": "#000000",
+        },
+      },
+    ],
+  },
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,5 +26,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
