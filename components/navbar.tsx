@@ -28,7 +28,7 @@ export default function Navbar() {
     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1" strokeLinecap="square" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     </button>
 
-    {AccountDropdown()}
+    <AccountDropdown/>
     <div className="flex-none">
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className="btn btn-link btn-square">
@@ -52,7 +52,7 @@ export default function Navbar() {
 </div>
     
   </div> 
-  <div className="drawer-side">
+  <div className="drawer-side" >
     <label htmlFor="my-drawer" className="drawer-overlay"></label>
     <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
       {/* Sidebar content here */}
