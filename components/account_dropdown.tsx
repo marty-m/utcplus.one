@@ -1,10 +1,26 @@
-import { pb } from "@/lib/pocketbase"
+'use client'
+import { pb } from "@/app/pocketbase"
 import Link from "next/link";
+import {useRouter } from "next/navigation";
 
-export default function AccountDropdown() {
-    let div
-    if (pb.authStore.isValid) {
-        div = <div className="dropdown dropdown-end">
+
+
+
+    export default function AccountDropdown() {
+        const router = useRouter();
+        const isLoggedIn = pb.authStore.isValid
+        
+        
+        async function logout(){
+            pb.authStore.clear(); // clear auth data
+            router.refresh() // force rerender
+            }  
+        
+        
+        
+            
+            if (isLoggedIn){
+                return(<> <div className="dropdown dropdown-end">
                 <label tabIndex={0} className="btn btn-link btn-square">
                     <div className="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1" strokeLinecap="square" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -19,22 +35,21 @@ export default function AccountDropdown() {
                     <Link href="/account">
                     <button className="btn btn-active btn-accent btn-block">
                         Account
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     </button>
                     </Link>
                     
                     
-                    <button onClick={pb.authStore.clear} className="btn btn-active btn-accent btn-block">
+                    <button onClick={logout} className="btn btn-active btn-accent btn-block">
                         Log Out
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M16 17l5-5-5-5M19.8 12H9M10 3H4v18h6"/></svg>
                     </button>
                     </div>
                 </div>
             </div>
-    } 
-    else {
-
-            div = <div className="dropdown dropdown-end">
+            </>) 
+            }
+            else{
+                return(<><div className="dropdown dropdown-end">
                 <button className="btn btn-link btn-square">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1" strokeLinecap="square" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </button>
@@ -54,8 +69,7 @@ export default function AccountDropdown() {
                     </Link>
                     </div>
                 </div>
-            </div>
-        }
-     return(div);
-
-}    
+            </div></>) 
+            }
+            
+    }
