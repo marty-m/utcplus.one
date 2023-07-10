@@ -1,20 +1,17 @@
 'use client'
+import useLogout from "@/app/hooks/useLogout";
 import { pb } from "@/app/pocketbase"
 import Link from "next/link";
-import {useRouter } from "next/navigation";
 
 
 
 
     export default function AccountDropdown() {
-        const router = useRouter();
+        const logout = useLogout();
         const isLoggedIn = pb.authStore.isValid
         
         
-        async function logout(){
-            pb.authStore.clear(); // clear auth data
-            router.refresh() // force rerender
-            }  
+        
         
         
         
@@ -24,8 +21,7 @@ import {useRouter } from "next/navigation";
                 <label tabIndex={0} className="btn btn-link btn-square">
                     <div className="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1" strokeLinecap="square" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        <span className="badge badge-sm indicator-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span className="badge badge-sm indicator-item bg-green-700">
                             </span>
                     </div>
                 </label>
