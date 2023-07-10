@@ -1,9 +1,10 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Navbar from '@/components/navbar'
-import Footer from '@/components/footer'
+import Navbar from '@/app/components/navbar'
+import Footer from '@/app/components/footer'
 
 const inter = Inter({ subsets: ['latin'] })
+
 
 export const metadata = {
   title: 'UTC+1',
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html>
       <body>
         <main>
-          <Navbar />
-          {children}
-          <Footer />
+          
+            <Navbar />
+              {children}
+            <Footer />
+          
         </main>
       </body>
     </html>
