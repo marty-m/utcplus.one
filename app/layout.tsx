@@ -23,7 +23,7 @@ export default function RootLayout({
         <main>
             <div className="drawer">
               <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-              <div className="drawer-content h-screen w-screen flex">
+              <div className="drawer-content h-screen w-screen flex overflow-x-hidden">
                 <Navbar/>
                 <div className='pt-28'>
                   {children}
