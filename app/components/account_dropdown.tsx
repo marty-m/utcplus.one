@@ -30,13 +30,13 @@ import Link from "next/link";
                 
                     <Link href="/account">
                     <button className="btn btn-active btn-accent btn-block">
-                        Account
+                        ACCOUNT
                     </button>
                     </Link>
                     
                     
                     <button onClick={logout} className="btn btn-active btn-accent btn-block">
-                        Log Out
+                        LOG OUT
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M16 17l5-5-5-5M19.8 12H9M10 3H4v18h6"/></svg>
                     </button>
                     </div>
@@ -53,13 +53,13 @@ import Link from "next/link";
                     <div className="card-body">
                     <Link href="/auth/login">
                     <button className="btn btn-active btn-accent btn-block">
-                        Log In
+                        SIGN IN
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/></svg>
                     </button>
                     </Link>
                     <Link href="/auth/signup">
                     <button className="btn btn-active btn-accent btn-block">
-                        Sign up
+                        SIGN UP
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="round"><polygon points="14 2 18 6 7 17 3 17 3 13 14 2"></polygon><line x1="3" y1="22" x2="21" y2="22"></line></svg>
                     </button>
                     </Link>
