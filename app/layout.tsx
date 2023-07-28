@@ -25,7 +25,10 @@ export default function RootLayout({
               <input id="my-drawer" type="checkbox" className="drawer-toggle" />
               <div className="drawer-content h-screen w-screen flex">
                 <Navbar/>
+                <div className='pt-28'>
                   {children}
+                </div>
+                  
               </div> 
               <div className="drawer-side">
                 <label htmlFor="my-drawer" className="drawer-overlay"></label>
