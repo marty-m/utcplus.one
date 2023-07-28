@@ -8,6 +8,7 @@ module.exports = {
           "--rounded-btn": "0.1rem",
           "--rounded-box": "0.1rem",
           "neutral": "#000000",
+          "accent": "#FDE047"
         },
       },
     ],
