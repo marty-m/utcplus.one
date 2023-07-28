@@ -30,7 +30,7 @@ export default function SignupPage() {
             <div className="border border-black shadow-xl py-14 px-20">
             <h1 className=" text-left font-mono font-bold pb-8 text-4xl underline underline-offset-8">SIGN UP</h1>
             
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center w-88">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center w-auto">
                 
                 <label className="font-mono text-sm pb-1">EMAIL ADDRESS</label>
                 <input type="email" placeholder="" {...register("email")} required/>
@@ -42,9 +42,8 @@ export default function SignupPage() {
                 <input type="text" placeholder="" {...register("lname")} required/>
 
                 <label className="font-mono text-sm pb-1 pt-4">PASSWORD 
-                <label className="justify-right text-gray-500 font-mono text-right text-xs pl-44">(min. 8 characters)</label>
+                <label className="justify-right text-gray-500 font-mono text-right text-xs pl-48">(min. 8 characters)</label>
                 </label>
-              
                 <input type="password" placeholder="" {...register("password")} required minLength={8}/>
                 
                 <label className="font-mono text-sm pb-1 pt-4">CONFIRM PASSWORD</label>
