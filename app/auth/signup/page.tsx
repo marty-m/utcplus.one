@@ -27,7 +27,7 @@ export default function SignupPage() {
             
             <div className="flex h-3/5 w-1/2 items-center justify-center py-20">
             
-            <div className="border border-gray-100 shadow-lg py-14 px-20">
+            <div className="border border-black shadow-xl py-14 px-20">
             <h1 className=" text-left font-mono font-bold pb-8 text-4xl underline underline-offset-8">SIGN UP</h1>
             
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center w-88">
