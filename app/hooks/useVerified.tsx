@@ -6,9 +6,13 @@ export default function useVerified() {
     
     useEffect(() => {
         async function checkVerification() {
-            const userID = pb.authStore.model.id;
-            const userdata = await pb.collection('users').getOne(userID);
-            setVerified(userdata.verified);
+            try {
+                const userID = pb.authStore.model.id;
+                const userdata = await pb.collection('users').getOne(userID);
+                setVerified(userdata.verified);
+            } catch (error) {
+                console.log(error);
+            }
         }
         const isLoggedIn = pb.authStore.isValid;
         if (isLoggedIn) checkVerification();
