@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     
-    <html className='scroll-smooth'>
+    <html className='scroll-smooth font-mono'>
       <body>
         <main>
             <div className="drawer">
