@@ -13,11 +13,13 @@ export default function useLogin() {
             const authData = await pb
                 .collection('users')
                 .authWithPassword(email, password);
-            router.refresh();
+                router.push('/account');
+                router.refresh();
         } catch (error) {
             alert(error);
         }
         setLoading(false);
+        
     }
     return {login, isLoading};
 }
