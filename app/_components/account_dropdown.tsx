@@ -1,5 +1,5 @@
 'use client'
-import useLogout from "@/app/hooks/useLogout";
+import useLogout from "@/app/_hooks/useLogout";
 import { pb } from "@/app/pocketbase"
 import Link from "next/link";
 
