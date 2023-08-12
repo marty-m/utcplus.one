@@ -1,7 +1,7 @@
 'use client'
 import {useForm} from "react-hook-form";
-import useLogin from "../../hooks/useLogin";
-import useLoggedInRedir from "@/app/hooks/useLoggedInRedir";
+import useLogin from "../../_hooks/useLogin";
+import useLoggedInRedir from "@/app/_hooks/useLoggedInRedir";
 
 
 export default function Auth(){

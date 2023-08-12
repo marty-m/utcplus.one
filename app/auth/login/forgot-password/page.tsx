@@ -1,7 +1,7 @@
 'use client'
 import {useForm} from "react-hook-form";
-import usePwReset from "@/app/hooks/usePwReset";
-import useLoggedInRedir from "@/app/hooks/useLoggedInRedir";
+import usePwReset from "@/app/_hooks/usePwReset";
+import useLoggedInRedir from "@/app/_hooks/useLoggedInRedir";
 
 
 export default function ForgotPassword(){

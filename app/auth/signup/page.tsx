@@ -1,7 +1,7 @@
 'use client'
 import { useForm} from "react-hook-form";
-import useSignUp from "@/app/hooks/useSignUp";
-import useLoggedInRedir from "@/app/hooks/useLoggedInRedir";
+import useSignUp from "@/app/_hooks/useSignUp";
+import useLoggedInRedir from "@/app/_hooks/useLoggedInRedir";
 
 
 
