@@ -1,4 +1,5 @@
-![Logo](https://utc1assets.s3.eu-north-1.amazonaws.com/utcplusonedarktrsp.png)
+
+<img src="[drawing.jpg](https://utc1assets.s3.eu-north-1.amazonaws.com/utcplusonedarktrsp.png)" alt="logo" width="200" height="200"/>
 
 
 # UTC+1 CLOTHING
