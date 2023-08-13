@@ -1,4 +1,4 @@
-![Logo]([https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png](https://utc1assets.s3.eu-north-1.amazonaws.com/utcplusonedarktrsp.png))
+![Logo]([https://utc1assets.s3.eu-north-1.amazonaws.com/utcplusonedarktrsp.png]))
 
 
 # UTC+1 CLOTHING
