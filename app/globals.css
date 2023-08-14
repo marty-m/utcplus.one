@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.display-linebreak {
+  white-space: pre-line;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255;
