@@ -5,9 +5,6 @@ import useCatalog from "@/app/_hooks/useCatalog";
 export default function ProductPage({ params }: { params: { id: string } }){
     
     const { getDetails } = useCatalog();
-    const itemDetails = getDetails(params.id).then((details) => {
-        return (details?.description) ;
-    });
 
     return( 
         
@@ -16,13 +13,27 @@ export default function ProductPage({ params }: { params: { id: string } }){
             
             
             <div className="flex h-full items-center justify-center w-2/5 fixed left-0">
-                <div className="h-min w-5/12 pb-64">
+                <div className="h-min w-5/12 pb-52">
+                    <div className=" text-right text-xl font-bold">
+                        <label>
+                        {getDetails(params.id).then((details) => {
+                                return (details?.name)})} {/*Grab item name*/}
+                        </label>
+                    </div>
+                    <div className="pb-2 text-right text-lg font-extralight">
+                        <label>
+                        {getDetails(params.id).then((details) => {
+                                return ([details?.price, ' ' ,details?.currency])})} {/*Grab item price and currency*/}
+                        </label>
+                    </div>
+                    
                     <details className="collapse collapse-plus border border-black">
-                        <summary className="collapse-title font-medium float-left pt-4 border-b border-black">PRODUCT DETAILS & SIZING</summary>
+                        <summary className="collapse-title float-left pt-4 border-b border-black">PRODUCT DETAILS & SIZING</summary>
                         
                         <div className="collapse-content pt-3 text-xs display-linebreak"> 
                         
-                          {itemDetails}
+                          {getDetails(params.id).then((details) => {
+                                return (details?.description)}) /*Grab item description*/} 
                             
                         </div>
                     </details>
@@ -50,7 +61,7 @@ export default function ProductPage({ params }: { params: { id: string } }){
             </div>
 
 
-
+            
 
 
 
