@@ -45,8 +45,9 @@ export default function useCatalog(){
             const name = response.result.object.itemData.name;
             const description = response.result.object.itemData.description;
             const price = Number(response.result.object.itemData.variations[0].itemVariationData.priceMoney.amount)/100;
+            const currency = response.result.object.itemData.variations[0].itemVariationData.priceMoney.currency;
 
-            return {prodID, name, description, price, image1URL, image2URL};
+            return {prodID, name, description, price, image1URL, image2URL, currency};
 
           } catch(error) {
             console.log(error);
