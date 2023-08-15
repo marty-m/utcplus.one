@@ -37,7 +37,7 @@ export default function RootLayout({
                   <div className='px-8 text-gray-200 grid grid-cols-1 place-content-between h-5/6'>
                     <div className='text-xl grid grid-cols-1 h-max gap-7'>
                     <a href='/products'>SHOP</a>
-                    <a href='/products/reworked'>REWORKED</a>
+                    <a href='/products/reworked'>REWORKED (WIP)</a>
                     <a href='/products/collections'>COLLECTIONS</a>
                     {/*<a href='/products/lookbooks/ss23'>SS23 LOOKBOOK</a>*/}
                     <a href='/news'>NEWS</a>
