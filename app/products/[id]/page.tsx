@@ -1,29 +1,27 @@
-import useCatalog from "@/app/_hooks/useCatalog";
+import { getDetails, getAllImageURLs} from "@/app/_hooks/useCatalog";
 
 
 
-export default function ProductPage({ params }: { params: { id: string } }){
+export default async function ProductPage({ params }: { params: { id: string } }){
     
-    const { getDetails } = useCatalog();
+    const imageURLs = await getAllImageURLs(params.id)
+    const itemDetails = await getDetails(params.id)
 
     return( 
-        
-        
+                
+
         <div className="w-screen h-full">
-            
             
             <div className="flex h-full items-center justify-center w-2/5 fixed left-0">
                 <div className="h-min w-5/12 pb-52">
                     <div className=" text-right text-xl font-bold">
                         <label>
-                        {getDetails(params.id).then((details) => {
-                                return (details?.name)})} {/*Grab item name*/}
+                        {itemDetails?.name} {/*Grab item name*/}
                         </label>
                     </div>
                     <div className="pb-2 text-right text-lg font-extralight">
                         <label>
-                        {getDetails(params.id).then((details) => {
-                                return ([details?.price, ' ' ,details?.currency])})} {/*Grab item price and currency*/}
+                        {itemDetails?.currency} {/*Grab item price and currency*/}
                         </label>
                     </div>
                     
@@ -32,8 +30,7 @@ export default function ProductPage({ params }: { params: { id: string } }){
                         
                         <div className="collapse-content pt-3 text-xs display-linebreak"> 
                         
-                          {getDetails(params.id).then((details) => {
-                                return (details?.description)}) /*Grab item description*/} 
+                          {itemDetails?.description} {/*Grab item description*/} 
                             
                         </div>
                     </details>
