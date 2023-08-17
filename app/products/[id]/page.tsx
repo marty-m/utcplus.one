@@ -21,7 +21,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     </div>
                     <div className="pb-2 text-right text-lg font-extralight">
                         <label>
-                        {itemDetails?.currency} {/*Grab item price and currency*/}
+                        {itemDetails?.price + " " + itemDetails?.currency} {/*Grab item price and currency*/}
                         </label>
                     </div>
                     
