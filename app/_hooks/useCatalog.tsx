@@ -7,54 +7,62 @@ export const dynamic = 'auto',
     runtime = 'nodejs',
     preferredRegion = 'auto'
 
-export default function useCatalog(){
+
     
-    
-    async function getAllCatalogObjIDs(){
-        try {
-          const response = await client.catalogApi.searchCatalogItems({
-            sortOrder: 'DESC',
-            productTypes: [
-              'REGULAR'
-            ]
-          });
-          var objectIDs: string[] = [];
-          response.result.items.forEach((object: any) => {
-            if (object.type == "ITEM"){
-              objectIDs.push(object.id);
-            }
-          });
-          
-          return objectIDs;
-          }
-        catch(error) {
-          console.log(error);
+export async function getAllCatalogObjIDs(){
+    try {
+      const response = await client.catalogApi.searchCatalogItems({
+        sortOrder: 'DESC',
+        productTypes: [
+          'REGULAR'
+        ]
+      });
+      var objectIDs: string[] = [];
+      response.result.items.forEach((object: any) => {
+        if (object.type == "ITEM"){
+          objectIDs.push(object.id);
         }
+      });
+      
+      return objectIDs;
       }
+    catch(error) {
+      console.log(error);
+    }
+  }
 
-    async function getDetails(id: string){
-        try {
-            const response = await client.catalogApi.retrieveCatalogObject(id);
-            const image1Response = await client.catalogApi.retrieveCatalogObject(response.result.object.itemData.imageIds[0]);
-            const image2Response = await client.catalogApi.retrieveCatalogObject(response.result.object.itemData.imageIds[1]);
-          
-            const image1URL: string = image1Response.result.object.imageData.url;
-            const image2URL: string = image2Response.result.object.imageData.url;
-           
-            const prodID = response.result.object.id;
-            const name = response.result.object.itemData.name;
-            const description = response.result.object.itemData.description;
-            const price = Number(response.result.object.itemData.variations[0].itemVariationData.priceMoney.amount)/100;
-            const currency = response.result.object.itemData.variations[0].itemVariationData.priceMoney.currency;
-
-            return {prodID, name, description, price, image1URL, image2URL, currency};
-
-          } catch(error) {
-            console.log(error);
-          }
-        }
-              
+export async function getDetails(id: string){
+    try {
+        const response = await client.catalogApi.retrieveCatalogObject(id);
         
-        return {getAllCatalogObjIDs, getDetails};
-        
+        const prodID = response.result.object.id;
+        const name = response.result.object.itemData.name;
+        const description = response.result.object.itemData.description;
+        const price = Number(response.result.object.itemData.variations[0].itemVariationData.priceMoney.amount)/100;
+        const currency = response.result.object.itemData.variations[0].itemVariationData.priceMoney.currency;
+
+        return {prodID, name, description, price, currency};
+
+      } catch(error) {
+        console.log(error);
+      }
+    }
+  
+export async function getAllImageURLs(objId:string){    
+  try {
+    const response = await client.catalogApi.retrieveCatalogObject(objId, true);
+    var imageObjects = response.result.relatedObjects;
+    var imageURLs:string[] = [];
+
+    imageObjects.forEach((imageObj: any) => {
+      imageURLs.push(imageObj.imageData.url)
+    });
+
+    console.log(response.result.relatedObjects)
+    return imageURLs
+
+  } catch (error) {
+    console.log(error)
+  }
 }
+        
