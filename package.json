@@ -24,7 +24,8 @@
     "react-square-web-payments-sdk": "^3.2.1",
     "square": "^29.0.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.1.6"
+    "typescript": "5.1.6",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
