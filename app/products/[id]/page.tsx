@@ -12,8 +12,8 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
         <div className="w-screen h-full">
             
-            <div className="flex h-full items-center justify-center w-2/5 fixed left-0">
-                <div className="h-min w-5/12 pb-52">
+            <div className="flex flex-col h-full items-end justify-center w-1/4 fixed left-0 bg-white pr-10">
+                <div className="h-min pl-14 pb-52 pt-14">
                     <div className=" text-right text-xl font-bold">
                         <label>
                         {itemDetails?.name} {/*Grab item name*/}
@@ -59,7 +59,15 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
 
             
+            <div className="flex flex-col items-center pt-5">
+                {imageURLs?.map((url) => {
+                    return(
+                        <img key={url} className="pb-7" src={url} width={580} height={580}></img>
 
+                    );
+                })}
+
+            </div>
 
 
 
