@@ -58,7 +58,6 @@ export async function getAllImageURLs(objId:string){
       imageURLs.push(imageObj.imageData.url)
     });
 
-    console.log(response.result.relatedObjects)
     return imageURLs
 
   } catch (error) {
