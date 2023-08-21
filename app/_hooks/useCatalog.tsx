@@ -1,4 +1,5 @@
 import { client } from "@/app/square_client";
+import { isInStock } from "./useInventory";
 
 export const dynamic = 'auto',
     dynamicparams = true, 
@@ -17,23 +18,23 @@ export async function getAllCatalogObjIDs(){
           'REGULAR'
         ]
       });
-      var objectIDs: string[] = [];
+      var itemObjectIds: string[] = [];
       response.result.items.forEach((object: any) => {
         if (object.type == "ITEM"){
-          objectIDs.push(object.id);
+          itemObjectIds.push(object.id);
         }
       });
       
-      return objectIDs;
+      return itemObjectIds;
       }
     catch(error) {
       console.log(error);
     }
   }
 
-export async function getDetails(id: string){
+export async function getDetails(itemId: string){
     try {
-        const response = await client.catalogApi.retrieveCatalogObject(id);
+        const response = await client.catalogApi.retrieveCatalogObject(itemId);
         
         const prodID = response.result.object.id;
         const name = response.result.object.itemData.name;
@@ -48,18 +49,80 @@ export async function getDetails(id: string){
       }
     }
   
-export async function getAllImageURLs(objId:string){    
+export async function getAllImageURLs(itemObjectId:string){    
   try {
-    const response = await client.catalogApi.retrieveCatalogObject(objId, true);
-    var imageObjects = response.result.relatedObjects;
+    const response = await client.catalogApi.retrieveCatalogObject(itemObjectId, true);
+    var imageIDs = response.result.object.itemData.imageIds;
     var imageURLs:string[] = [];
 
-    imageObjects.forEach((imageObj: any) => {
-      imageURLs.push(imageObj.imageData.url)
-    });
+    for (const imageID of imageIDs){
+      const imageResponse = await client.catalogApi.retrieveCatalogObject(imageID,false);
+
+      imageURLs.push(imageResponse.result.object.imageData.url);
+    }
 
     return imageURLs
 
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function getAllVariationObjects(itemId:string){
+  try {
+    const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
+    return response.result.object.itemData.variations;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+export async function getAllItemVariationOptions(itemId:string){
+  try{
+    const variationObjects = await getAllVariationObjects(itemId);
+    
+    const options = variationObjects[0].itemVariationData.itemOptionValues;
+    const optionIds: string[] = []
+    const allOptionValues: any[] = []
+    
+    for (const option of options){
+      optionIds.push(option.itemOptionId);
+    }
+
+    for (const id of optionIds){
+      const optionResponse = await client.catalogApi.retrieveCatalogObject(id, false);
+      const optionValues: string[] = [];
+      const optionName: string = optionResponse.result.object.itemOptionData.name;
+
+      optionResponse.result.object.itemOptionData.values.forEach((value:any) => {
+        optionValues.push(value.itemOptionValueData.name);
+      });
+
+      allOptionValues.push({name:optionName ,values:optionValues});
+    }
+   
+    
+    return allOptionValues;
+    
+
+  } catch(error){
+    console.log(error)
+  }
+}
+
+export async function getChosenVariationId(itemId:string, chosenVariation:string[]){
+  try {
+    const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
+
+    const chosenVariationName = chosenVariation.join(", ");
+
+    var itemVariationObjects = response.result.object.itemData.variations;
+    for (const variationObject of itemVariationObjects){
+        if (chosenVariationName == variationObject.itemVariationData.name){
+          return variationObject.id;
+        }
+    }
   } catch (error) {
     console.log(error)
   }
