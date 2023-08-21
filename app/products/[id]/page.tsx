@@ -1,10 +1,13 @@
-import { getDetails, getAllImageURLs} from "@/app/_hooks/useCatalog";
+import useCatalog from "@/app/_hooks/useCatalog";
 import VariationForm from "./variation_form";
+
+
 
 
 
 export default async function ProductPage({ params }: { params: { id: string } }){
     
+    const { getAllImageURLs, getDetails } = useCatalog()
     const imageURLs = await getAllImageURLs(params.id)
     const itemDetails = await getDetails(params.id)
 

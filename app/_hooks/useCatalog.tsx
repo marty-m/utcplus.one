@@ -1,5 +1,4 @@
 import { client } from "@/app/square_client";
-import { isInStock } from "./useInventory";
 
 export const dynamic = 'auto',
     dynamicparams = true, 
@@ -8,9 +7,9 @@ export const dynamic = 'auto',
     runtime = 'nodejs',
     preferredRegion = 'auto'
 
-
+export default function useCatalog() {
     
-export async function getAllCatalogObjIDs(){
+async function getAllCatalogObjIDs(){
     try {
       const response = await client.catalogApi.searchCatalogItems({
         sortOrder: 'DESC',
@@ -32,7 +31,7 @@ export async function getAllCatalogObjIDs(){
     }
   }
 
-export async function getDetails(itemId: string){
+async function getDetails(itemId: string){
     try {
         const response = await client.catalogApi.retrieveCatalogObject(itemId);
         
@@ -49,7 +48,7 @@ export async function getDetails(itemId: string){
       }
     }
   
-export async function getAllImageURLs(itemObjectId:string){    
+async function getAllImageURLs(itemObjectId:string){    
   try {
     const response = await client.catalogApi.retrieveCatalogObject(itemObjectId, true);
     var imageIDs = response.result.object.itemData.imageIds;
@@ -68,7 +67,7 @@ export async function getAllImageURLs(itemObjectId:string){
   }
 }
 
-export async function getAllVariationObjects(itemId:string){
+async function getAllVariationObjects(itemId:string){
   try {
     const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
     return response.result.object.itemData.variations;
@@ -78,32 +77,29 @@ export async function getAllVariationObjects(itemId:string){
 }
 
 
-export async function getAllItemVariationOptions(itemId:string){
+async function getAllColorSizeVariations(itemId:string){
   try{
     const variationObjects = await getAllVariationObjects(itemId);
     
-    const options = variationObjects[0].itemVariationData.itemOptionValues;
-    const optionIds: string[] = []
-    const allOptionValues: any[] = []
+    const colorOptionID = variationObjects[0].itemVariationData.itemOptionValues[0].itemOptionId;
+    const sizeOptionID = variationObjects[0].itemVariationData.itemOptionValues[1].itemOptionId;
+
+    const colorOptionValues: string[] = [];
+    const sizeOptionValues: string[] = [];
+
+    const colorOptionResponse = await client.catalogApi.retrieveCatalogObject(colorOptionID, false);
+    const sizeOptionResponse = await client.catalogApi.retrieveCatalogObject(sizeOptionID, false);
+
+    colorOptionResponse.result.object.itemOptionData.values.forEach((value:any) => {
+      colorOptionValues.push(value.itemOptionValueData.name);
+    });
+    sizeOptionResponse.result.object.itemOptionData.values.forEach((value:any) => {
+      sizeOptionValues.push(value.itemOptionValueData.name);
+    });
+
+    return {colors: colorOptionValues, sizes: sizeOptionValues};
+
     
-    for (const option of options){
-      optionIds.push(option.itemOptionId);
-    }
-
-    for (const id of optionIds){
-      const optionResponse = await client.catalogApi.retrieveCatalogObject(id, false);
-      const optionValues: string[] = [];
-      const optionName: string = optionResponse.result.object.itemOptionData.name;
-
-      optionResponse.result.object.itemOptionData.values.forEach((value:any) => {
-        optionValues.push(value.itemOptionValueData.name);
-      });
-
-      allOptionValues.push({name:optionName ,values:optionValues});
-    }
-   
-    
-    return allOptionValues;
     
 
   } catch(error){
@@ -111,7 +107,7 @@ export async function getAllItemVariationOptions(itemId:string){
   }
 }
 
-export async function getChosenVariationId(itemId:string, chosenVariation:string[]){
+async function getChosenVariationId(itemId:string, chosenVariation:string[]){
   try {
     const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
 
@@ -127,4 +123,7 @@ export async function getChosenVariationId(itemId:string, chosenVariation:string
     console.log(error)
   }
 }
-        
+
+return {getAllCatalogObjIDs, getDetails, getAllImageURLs, getAllColorSizeVariations, getChosenVariationId}
+
+}
