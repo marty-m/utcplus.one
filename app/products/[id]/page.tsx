@@ -1,4 +1,5 @@
 import { getDetails, getAllImageURLs} from "@/app/_hooks/useCatalog";
+import VariationForm from "./variation_form";
 
 
 
@@ -59,17 +60,23 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
 
             
-            <div className="flex flex-col items-center pt-5">
+            <div className="flex flex-col items-center pt-5"> {/*Scrollable product images*/}
                 {imageURLs?.map((url) => {
                     return(
-                        <img key={url} className="pb-7" src={url} width={580} height={580}></img>
+                        <img key={url} className="pb-7" src={url} width={580} height={580}></img> 
 
                     );
                 })}
 
             </div>
-
-
+            
+            
+            <div className="flex flex-col h-full items-start justify-center fixed end-0 top-20 bg-white pr-10">
+                <div className="h-min pl-14 pb-52 pt-14">
+                    <VariationForm itemId={params.id}/>
+                </div>
+            </div>
+            
 
 
         </div>
