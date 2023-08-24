@@ -1,5 +1,4 @@
-import { use } from "react"
-import useCatalog from "../_hooks/useCatalog"
+import useCatalog from "../app/hooks/useCatalog"
 
 export default async function ProductTile(id: string){
     const { getAllImageURLs, getDetails } = useCatalog()

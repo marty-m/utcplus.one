@@ -1,15 +1,23 @@
-import useCatalog from "@/app/_hooks/useCatalog";
+import useCatalog from "@/app/hooks/useCatalog";
 import VariationForm from "./variation_form";
 
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+  } from "@/components/ui/accordion"
+import { use } from "react";
 
 
 
 
-export default async function ProductPage({ params }: { params: { id: string } }){
+
+export default function ProductPage({ params }: { params: { id: string } }){
     
-    const { getAllImageURLs, getDetails } = useCatalog()
-    const imageURLs = await getAllImageURLs(params.id)
-    const itemDetails = await getDetails(params.id)
+        const { getDetails, getAllImageURLs  } = useCatalog()
+        const imageURLs = await getAllImageURLs(params.id)
+        const itemDetails = await getDetails(params.id)
 
     return( 
                 
@@ -29,24 +37,17 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         </label>
                     </div>
                     
-                    <details className="collapse collapse-plus border border-black">
-                        <summary className="collapse-title float-left pt-4 border-b border-black">PRODUCT DETAILS & SIZING</summary>
-                        
-                        <div className="collapse-content pt-3 text-xs display-linebreak"> 
-                        
-                          {itemDetails?.description} {/*Grab item description*/} 
-                            
-                        </div>
-                    </details>
-
-                <div className="py-4"/> {/*spacer*/}
-
-                    <details className="collapse collapse-plus border border-black">
-                        <summary className="collapse-title font-medium float-left pt-4 border-b border-black">DELIVERY & RETURNS</summary>
-                        
-                        <div className="collapse-content pt-3 text-xs w-fit"> 
-                            
-                                <p>
+                    <Accordion type="single" collapsible>
+                        <AccordionItem value="item-1">
+                            <AccordionTrigger>ITEM DETAILS & SIZING</AccordionTrigger>
+                            <AccordionContent>
+                            {itemDetails?.description}
+                            </AccordionContent>
+                        </AccordionItem>
+                        <AccordionItem value="item-2">
+                            <AccordionTrigger>DELIVERY & RETURNS</AccordionTrigger>
+                            <AccordionContent>
+                            <p>
                                 All domestic orders are shipped via UPS and all 
                                 international orders are shipped via DHL. This item ships in 5-7 business days. 
                                 All packages are insured and trackable. An email containing the tracking 
@@ -55,9 +56,10 @@ export default async function ProductPage({ params }: { params: { id: string } }
                                 For more information, view our <a className="underline" href="/terms-and-conditions">Shipping and Return</a> policies.
                                 
                                 </p>
-                            
-                        </div>
-                    </details>           
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
+          
                 </div>
             </div>
 
