@@ -1,5 +1,5 @@
-import ProductTile from "@/app/_components/product_tile";
-import useCatalog from "@/app/_hooks/useCatalog";
+import ProductTile from "@/components/product_tile";
+import useCatalog from "@/app/hooks/useCatalog";
 
 
 export default async function AllProducts() {

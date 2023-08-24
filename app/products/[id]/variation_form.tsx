@@ -1,6 +1,6 @@
 'use client'
-import useCatalog from "@/app/_hooks/useCatalog";
-import { isInStock } from "@/app/_hooks/useInventory";
+import useCatalog from "@/app/hooks/useCatalog";
+import { isInStock } from "@/app/hooks/useInventory";
 import { use, useState } from "react";
 
 interface VariationFormProps {

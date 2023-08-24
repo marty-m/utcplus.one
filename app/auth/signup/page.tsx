@@ -1,7 +1,7 @@
 'use client'
 import { useForm} from "react-hook-form";
-import useSignUp from "@/app/_hooks/useSignUp";
-import useLoggedInRedir from "@/app/_hooks/useLoggedInRedir";
+import useSignUp from "@/app/hooks/useSignUp";
+import useLoggedInRedir from "@/app/hooks/useLoggedInRedir";
 
 
 
@@ -20,11 +20,11 @@ export default function SignupPage() {
 
 
     return(
-        <div className="flex flex-col justify-center items-center w-screen">
+        <div className="flex h-full flex-col justify-center items-center w-screen">
             
-            <div className="flex h-3/5 w-1/2 items-center justify-center py-20">
+            <div className="flex  items-center justify-center py-20">
             
-            <div className="border border-black shadow-xl py-14 px-20">
+            <div className="border w-auto border-black shadow-xl py-14 px-20">
             <h1 className=" text-left   font-bold pb-8 text-4xl underline underline-offset-8">SIGN UP</h1>
             
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center w-auto">
@@ -38,8 +38,8 @@ export default function SignupPage() {
                 <label className="  text-sm pb-1 pt-4">LAST NAME</label>
                 <input type="text" placeholder="" {...register("lname")} required/>
 
-                <label className="  text-sm pb-1 pt-4">PASSWORD 
-                <label className="justify-right text-gray-500   text-right text-xs pl-48">(min. 8 characters)</label>
+                <label className=" text-sm pb-1 pt-4">PASSWORD 
+                <label className="justify-right text-gray-500   text-right text-xs pl-52">(min. 8 characters)</label>
                 </label>
                 <input type="password" placeholder="" {...register("password")} required minLength={8}/>
                 
@@ -51,11 +51,11 @@ export default function SignupPage() {
                 </div>
                 
                 
-                <label className="text-xxs text-gray-500  ">
+                <label className="text-xs text-gray-500  ">
                     <input className="checkbox checkbox-xs border border-gray-500 rounded-none focus:ring-transparent" type="checkbox" required></input>
                     <label className="pl-2">I agree to the <a className="underline" href="">terms and conditions</a> and <a className="underline" href="">privacy policy</a>.</label>
                     </label>
-                <label className="text-xxs text-gray-500   pt-2.5">
+                <label className="text-xs text-gray-500   pt-2.5">
                     <input className="checkbox checkbox-xs border border-gray-500 rounded-none focus:ring-transparent" type="checkbox"></input>
                     <label className="pl-2">Sign me up to the mailing list</label>
                     </label>    

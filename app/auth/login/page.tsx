@@ -1,7 +1,7 @@
 'use client'
 import {useForm} from "react-hook-form";
-import useLogin from "../../_hooks/useLogin";
-import useLoggedInRedir from "@/app/_hooks/useLoggedInRedir";
+import useLogin from "../../hooks/useLogin";
+import useLoggedInRedir from "@/app/hooks/useLoggedInRedir";
 
 
 export default function Auth(){
@@ -16,9 +16,9 @@ export default function Auth(){
     }
 
     return(
-    <div className="flex flex-col justify-center items-center w-screen">
+    <div className="flex 1/2 flex-col pt-16 items-center w-screen">
         
-        <div className="flex h-3/5 w-1/2 items-center justify-center py-20">
+        <div className="flex h-auto w-1/2 items-center justify-center">
         
         <div className="border border-black shadow-xl py-14 px-20">
         <h1 className=" text-left   font-bold pb-8 text-4xl underline underline-offset-8">SIGN IN</h1>

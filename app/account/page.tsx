@@ -1,10 +1,10 @@
 'use client'
 
-import useLoggedInRedir from "../_hooks/useLoggedInRedir";
+import useLoggedInRedir from "../hooks/useLoggedInRedir";
 import { useRouter } from "next/navigation";
 import { pb } from "../pocketbase";
 import { useEffect } from "react";
-import useVerified from "../_hooks/useVerified";
+import useVerified from "../hooks/useVerified";
 
 export default function Account(){
 
