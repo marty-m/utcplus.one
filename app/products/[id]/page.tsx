@@ -1,31 +1,35 @@
-import useCatalog from "@/app/hooks/useCatalog";
 import VariationForm from "./variation_form";
-
+import useCatalog from "@/app/hooks/useCatalog";
+import Image from "next/image";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
   } from "@/components/ui/accordion"
-import { use } from "react";
 
 
 
 
 
-export default function ProductPage({ params }: { params: { id: string } }){
+
+export default async function ProductPage({ params }: { params: { id: string } }){
+    const {getAllImageURLs, getDetails, getAllColorSizeVariations} = useCatalog();
+    const imageURLs = await getAllImageURLs(params.id);
+    const itemDetails = await getDetails(params.id);
+    const variationObject = await getAllColorSizeVariations(params.id);
+    const variations = variationObject!.variations;
+    const colorKeys = variationObject!.colorKeys;
+
     
-        const { getDetails, getAllImageURLs  } = useCatalog()
-        const imageURLs = await getAllImageURLs(params.id)
-        const itemDetails = await getDetails(params.id)
 
     return( 
-                
-
-        <div className="w-screen h-full">
-            
-            <div className="flex flex-col h-full items-end justify-center w-1/4 fixed left-0 bg-white pr-10">
-                <div className="h-min pl-14 pb-52 pt-14">
+        
+        
+        <div className="w-full h-full grid grid-cols-4 gap-16">
+            <div className="flex flex-col items-end">
+            <div className=" fixed flex top-80">
+                <div className="h-min flex-col">
                     <div className=" text-right text-xl font-bold">
                         <label>
                         {itemDetails?.name} {/*Grab item name*/}
@@ -37,16 +41,16 @@ export default function ProductPage({ params }: { params: { id: string } }){
                         </label>
                     </div>
                     
-                    <Accordion type="single" collapsible>
+                    <Accordion type="single" collapsible className="w-60">
                         <AccordionItem value="item-1">
                             <AccordionTrigger>ITEM DETAILS & SIZING</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionContent className="text-xs display-linebreak">
                             {itemDetails?.description}
                             </AccordionContent>
                         </AccordionItem>
                         <AccordionItem value="item-2">
                             <AccordionTrigger>DELIVERY & RETURNS</AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionContent className="text-xs">
                             <p>
                                 All domestic orders are shipped via UPS and all 
                                 international orders are shipped via DHL. This item ships in 5-7 business days. 
@@ -62,25 +66,24 @@ export default function ProductPage({ params }: { params: { id: string } }){
           
                 </div>
             </div>
-
-
-            
-            <div className="flex flex-col items-center pt-5"> {/*Scrollable product images*/}
+        </div>
+            <div className="flex flex-col w-auto items-center justify-center col-span-2 ">
+                {/*Scrollable product images*/}
+                <div className="grid grid-cols-1 gap-y-5 border-x border-black ">
                 {imageURLs?.map((url) => {
                     return(
-                        <img key={url} className="pb-7" src={url} width={580} height={580}></img> 
+                        <Image alt={"Item image"} key={url}  src={url} width={590} height={590}></Image> 
 
                     );
                 })}
-
-            </div>
-            
-            
-            <div className="flex flex-col h-full items-start justify-center fixed end-0 top-20 bg-white pr-10">
-                <div className="h-min pl-14 pb-52 pt-14">
-                    <VariationForm itemId={params.id}/>
                 </div>
             </div>
+            <div className="flex flex-col items-start">
+                <div className="fixed flex top-80">
+                    <VariationForm colorKeys={colorKeys} variations={variations}></VariationForm>
+                </div>
+             </div>
+            
             
 
 
