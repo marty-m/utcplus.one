@@ -1,4 +1,7 @@
 import { client } from "@/app/square_client";
+import useInventory from "./useInventory";
+import { Variations } from "@/lib/types";
+
 
 export const dynamic = 'auto',
     dynamicparams = true, 
@@ -7,8 +10,11 @@ export const dynamic = 'auto',
     runtime = 'nodejs',
     preferredRegion = 'auto'
 
+
+
+
 export default function useCatalog() {
-    
+
 async function getAllCatalogObjIDs(){
     try {
       const response = await client.catalogApi.searchCatalogItems({
@@ -78,26 +84,46 @@ async function getAllVariationObjects(itemId:string){
 
 
 async function getAllColorSizeVariations(itemId:string){
+  /*
+    Iterate and extract all color and size variations in the following object format:
+    { "Gray" : [
+      {
+        size: "S",
+        variation_id : 123123,
+        inStock: true
+      },...
+		 
+
+    */
+
   try{
+    const {isInStock} = useInventory();
     const variationObjects = await getAllVariationObjects(itemId);
+    const variations:Variations = Object.create({});
+    const colorKeys:string[] = [];
     
-    const colorOptionID = variationObjects[0].itemVariationData.itemOptionValues[0].itemOptionId;
-    const sizeOptionID = variationObjects[0].itemVariationData.itemOptionValues[1].itemOptionId;
 
-    const colorOptionValues: string[] = [];
-    const sizeOptionValues: string[] = [];
+      for (var i = 0; i < variationObjects.length; i++){
+        const variationObject = variationObjects[i];
+        const colorKey:string = variationObject.itemVariationData.name.split(", ")[0];
+        const size:string = variationObject.itemVariationData.name.split(", ")[1];
+        
+        const variation_id = variationObject.id;
+        const inStock = await isInStock(variation_id);
+        
+        if (!variations[colorKey]){
+          variations[colorKey] = [];
+        }
+        if (!colorKeys.includes(colorKey)){
+          colorKeys.push(colorKey);
+        }
+        
+        variations[colorKey].push({size:size, variation_id:variation_id, inStock:inStock!})
+        
+        
+      }
 
-    const colorOptionResponse = await client.catalogApi.retrieveCatalogObject(colorOptionID, false);
-    const sizeOptionResponse = await client.catalogApi.retrieveCatalogObject(sizeOptionID, false);
-
-    colorOptionResponse.result.object.itemOptionData.values.forEach((value:any) => {
-      colorOptionValues.push(value.itemOptionValueData.name);
-    });
-    sizeOptionResponse.result.object.itemOptionData.values.forEach((value:any) => {
-      sizeOptionValues.push(value.itemOptionValueData.name);
-    });
-
-    return {colors: colorOptionValues, sizes: sizeOptionValues};
+    return {variations, colorKeys};
 
     
     
