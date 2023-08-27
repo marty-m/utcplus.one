@@ -17,9 +17,9 @@ export default function RootLayout({
     <html className='scroll-smooth font-mono'>
       <body>
         <main>
-          <div className='w-screen h-screen overflow-x-hidden'>
+          <div className='w-screen h-screen overflow-x-auto'>
           <Navbar/>
-          <div className='h-max mt-24'>
+          <div className='h-full mt-24'>
               {children}
           </div> 
           </div>          
