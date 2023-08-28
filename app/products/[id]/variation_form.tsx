@@ -12,7 +12,6 @@ import {
   import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -21,37 +20,50 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button";
-
+import { createItemObject } from "@/app/hooks/useItem";
+import useCartStore from "@/lib/cartStore";
 
 interface VariationFormProps {
     variations: Variations;
     colorKeys: string[];
+    itemDetails: any;
+    imageURLs: string[];
 }
 const FormSchema = z.object({
-    color: z.string(),
-    size: z.string(),
+    color: z.string().min(1),
+    size: z.string().min(1),
   })
 
 
 
 
-export default function VariationForm({variations, colorKeys}: VariationFormProps){
+export default function VariationForm({variations, colorKeys, itemDetails, imageURLs}: VariationFormProps){
     
     const [chosenColor,setChosenColor] = useState("");  
     const [chosenSize,setChosenSize] = useState("");
+    const [chosenVariationId, setChosenVariationId] = useState("");
     
     const variationInStock = chosenColor && variations[chosenColor].find((variation) => variation.size === chosenSize)?.inStock
 
     function onSubmit(values: z.infer<typeof FormSchema>) {
-    
-    console.log(values)
+      for (const options of variations[values.color]){
+          if (options.size === values.size){
+              setChosenVariationId(options.variation_id)
+          }
+      }
+      const object = createItemObject(itemDetails.prodID, chosenVariationId, imageURLs, itemDetails.name, itemDetails.price)
+      useCartStore.getState().addItem(object)
+      alert("Item added to cart")
     }
+
+
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
       })
     
-
+    console.log(form.formState.errors)
+    console.log(form.getValues())
     return(
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-4">
@@ -62,9 +74,10 @@ export default function VariationForm({variations, colorKeys}: VariationFormProp
             <FormItem>
               <FormLabel>COLOR</FormLabel>
               <Select onValueChange={(value)=>{
+                field.onChange(value)
                 setChosenColor(value)
-                field.onChange
-                }} defaultValue={field.value}>
+                }} 
+              defaultValue={field.value}>
                 <FormControl>
                 <SelectTrigger className="w-56 rounded-none">
                     <SelectValue placeholder="SELECT COLOR" />
@@ -88,8 +101,8 @@ export default function VariationForm({variations, colorKeys}: VariationFormProp
             <FormItem>
               <FormLabel>SIZE</FormLabel>
               <Select onValueChange={(value)=>{
+                field.onChange(value)
                 setChosenSize(value)
-                field.onChange
                 }} defaultValue={field.value}>
                 <FormControl>
                 <SelectTrigger className=" w-56 rounded-none">
