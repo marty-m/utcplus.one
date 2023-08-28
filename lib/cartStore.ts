@@ -1,24 +1,20 @@
 import {create, StoreApi } from 'zustand'
+import { devtools, persist } from 'zustand/middleware'
+import { CartItem } from '@/lib/types'
 
-interface Item{
-    itemId:string
-    variationId:string
-    name:string
-    price:number
-}
 
 interface Store{
-    items: Item[]
+    items: CartItem[]
     variationId: string
-    addItem: (item: Item) => void
+    addItem: (item: CartItem) => void
     removeItem: (prodId: string) => void
     totalPrice: () => number
 }
 
 const useCartStore = create<Store>((set: StoreApi<Store>['setState'], get: StoreApi<Store>['getState']) => ({
-    items: [],
+        items: [],
     variationId: "",
-    addItem: (item: Item) => set((state) => ({ items: [...state.items, item] })),
+    addItem: (item: CartItem) => set((state) => ({ items: [...state.items, item] })),
     removeItem: (prodId: string) =>
       set((state) => ({ items: state.items.filter((item) => item.itemId !== prodId) })),
     totalPrice: () =>

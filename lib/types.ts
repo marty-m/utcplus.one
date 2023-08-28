@@ -5,3 +5,11 @@ export type Variations = {
       inStock: boolean
     }[]
   }
+
+  export type CartItem = {
+    itemId: string, 
+    variationId: string,
+    images: string[],
+    name: string,
+    price: number,
+}
