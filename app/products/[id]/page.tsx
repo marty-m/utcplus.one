@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 <div className="grid grid-cols-1 gap-y-5 border-x border-black ">
                 {imageURLs?.map((url) => {
                     return(
-                        <Image alt={"Item image"} key={url}  src={url} width={590} height={590}></Image> 
+                        <Image priority={true} placeholder="empty" alt={"Item image"} key={url}  src={url} width={590} height={590}></Image> 
 
                     );
                 })}
@@ -80,7 +80,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </div>
             <div className="flex flex-col items-start">
                 <div className="fixed flex top-80">
-                    <VariationForm colorKeys={colorKeys} variations={variations}></VariationForm>
+                    <VariationForm colorKeys={colorKeys} variations={variations} imageURLs={imageURLs!} itemDetails={itemDetails}></VariationForm>
                 </div>
              </div>
             
