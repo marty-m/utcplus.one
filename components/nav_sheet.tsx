@@ -21,8 +21,8 @@ export default function NavSheet(){
             <div className='px-4 text-gray-200 grid grid-cols-1 place-content-between h-5/6'>
               <div className='text-xl grid grid-cols-1 h-max gap-7'>
                 <Link href='/products'>SHOP</Link>
-                <Link href='/products/reworked'>REWORKED (WIP)</Link>
-                <Link href='/products/collections'>COLLECTIONS</Link>
+                <Link href='/reworked'>REWORKED (WIP)</Link>
+                <Link href='/collections'>COLLECTIONS</Link>
                 {/*<Link href='/products/lookbooks/ss23'>SS23 LOOKBOOK</Link>*/}
                 <Link href='/news'>NEWS</Link>
                 <Link href='/about'>ABOUT</Link>
