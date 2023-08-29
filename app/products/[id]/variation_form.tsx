@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { Variations } from "@/lib/types";
+import { CartItem, Variations } from "@/lib/types";
 import * as z from "zod"
 import {
     Select,
@@ -15,12 +15,10 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
   } from "@/components/ui/form"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button";
-import { createItemObject } from "@/app/hooks/useItem";
 import useCartStore from "@/lib/cartStore";
 import { toast } from "@/components/ui/use-toast";
 
@@ -28,7 +26,6 @@ interface VariationFormProps {
     variations: Variations;
     colorKeys: string[];
     itemDetails: any;
-    imageURLs: string[];
 }
 const FormSchema = z.object({
     color: z.string().min(1),
@@ -38,21 +35,51 @@ const FormSchema = z.object({
 
 
 
-export default function VariationForm({variations, colorKeys, itemDetails, imageURLs}: VariationFormProps){
+export default function VariationForm({variations, colorKeys, itemDetails}: VariationFormProps){
     
     const [chosenColor,setChosenColor] = useState("");  
     const [chosenSize,setChosenSize] = useState("");
     const [chosenVariationId, setChosenVariationId] = useState("");
     
     const variationInStock = chosenColor && variations[chosenColor].find((variation) => variation.size === chosenSize)?.inStock
-
-    function onSubmit(values: z.infer<typeof FormSchema>) {
-      for (const options of variations[values.color]){
-          if (options.size === values.size){
-              setChosenVariationId(options.variation_id)
-          }
+    
+    function handleColorChange(value:string, field:any){
+      field.onChange(value)
+      setChosenColor(value)
+      for (const options of variations[value]){
+        if (options.size === chosenSize){
+          setChosenVariationId(options.variation_id)        
+        }
       }
-      const object = createItemObject(itemDetails.prodID, chosenVariationId, imageURLs, itemDetails.name, itemDetails.price)
+    }
+
+    function handleSizeChange(value:string, field:any){
+      field.onChange(value)
+      setChosenSize(value)
+      for (const options of variations[chosenColor]){
+        if (options.size === value){
+          setChosenVariationId(options.variation_id)        
+        }
+      }
+    }
+
+
+    function onSubmit(values: z.infer<typeof FormSchema>)   {
+      
+      console.log(chosenVariationId)
+      const object:CartItem = {
+        productId: itemDetails.prodID,
+        variationId: chosenVariationId,
+        name: itemDetails.name,
+        price: itemDetails.price,
+        images: variations[chosenColor].find((variation) => variation.size === chosenSize)?.imageURLs!,
+        color: chosenColor,
+        size: chosenSize,
+        quantity: useCartStore.getState().getQuantity(chosenVariationId)
+      }
+
+      console.log(object)
+
       useCartStore.getState().addItem(object)
       toast({
         title: "ITEM ADDED TO CART",
@@ -66,8 +93,7 @@ export default function VariationForm({variations, colorKeys, itemDetails, image
         resolver: zodResolver(FormSchema),
       })
     
-    console.log(form.formState.errors)
-    console.log(form.getValues())
+    //console.log(form.formState.errors)
     return(
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-4">
@@ -77,10 +103,7 @@ export default function VariationForm({variations, colorKeys, itemDetails, image
           render={({ field }) => (
             <FormItem>
               <FormLabel>COLOR</FormLabel>
-              <Select onValueChange={(value)=>{
-                field.onChange(value)
-                setChosenColor(value)
-                }} 
+              <Select onValueChange={(value)=>{handleColorChange(value, field)}} 
               defaultValue={field.value}>
                 <FormControl>
                 <SelectTrigger className="w-56 rounded-none">
@@ -104,10 +127,7 @@ export default function VariationForm({variations, colorKeys, itemDetails, image
           render={({ field }) => (
             <FormItem>
               <FormLabel>SIZE</FormLabel>
-              <Select onValueChange={(value)=>{
-                field.onChange(value)
-                setChosenSize(value)
-                }} defaultValue={field.value}>
+              <Select onValueChange={(value)=>{handleSizeChange(value, field)}} defaultValue={field.value}>
                 <FormControl>
                 <SelectTrigger className=" w-56 rounded-none">
                     <SelectValue placeholder="SELECT SIZE" />
