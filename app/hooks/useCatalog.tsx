@@ -90,7 +90,8 @@ async function getAllColorSizeVariations(itemId:string){
       {
         size: "S",
         variation_id : 123123,
-        inStock: true
+        inStock: true,
+        imageURLs: ["www.domain.com/image.jpeg"]
       },...
 		 
 
@@ -109,7 +110,18 @@ async function getAllColorSizeVariations(itemId:string){
         const size:string = variationObject.itemVariationData.name.split(", ")[1];
         
         const variation_id = variationObject.id;
+
         const inStock = await isInStock(variation_id);
+
+        
+        const variationImageURLs:string[] = []
+        const response = await client.catalogApi.retrieveCatalogObject(variation_id, true)
+        for (const relatedObject of response.result.relatedObjects) {
+          if (relatedObject.type == "IMAGE") {
+            variationImageURLs.push(relatedObject.imageData.url);
+          }
+        }
+        
         
         if (!variations[colorKey]){
           variations[colorKey] = [];
@@ -118,11 +130,9 @@ async function getAllColorSizeVariations(itemId:string){
           colorKeys.push(colorKey);
         }
         
-        variations[colorKey].push({size:size, variation_id:variation_id, inStock:inStock!})
-        
+        variations[colorKey].push({size:size, variation_id:variation_id, inStock:inStock!, imageURLs:variationImageURLs})
         
       }
-
     return {variations, colorKeys};
 
     
