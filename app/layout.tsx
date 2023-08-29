@@ -17,13 +17,12 @@ export default function RootLayout({
     
     <html className='scroll-smooth font-mono'>
       <body>
-        <main>
-          <div className='w-screen h-screen overflow-x-auto'>
+        <main className='w-screen h-screen overflow-x-auto'>
+          
           <Navbar/>
-          <div className='h-full mt-24'>
+          <div className='h-full pt-24'>
               {children}
-          </div> 
-          </div>          
+          </div>         
         </main>
         <Toaster />
       </body>
