@@ -22,6 +22,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button";
 import { createItemObject } from "@/app/hooks/useItem";
 import useCartStore from "@/lib/cartStore";
+import { toast } from "@/components/ui/use-toast";
 
 interface VariationFormProps {
     variations: Variations;
@@ -53,7 +54,10 @@ export default function VariationForm({variations, colorKeys, itemDetails, image
       }
       const object = createItemObject(itemDetails.prodID, chosenVariationId, imageURLs, itemDetails.name, itemDetails.price)
       useCartStore.getState().addItem(object)
-      alert("Item added to cart")
+      toast({
+        title: "ITEM ADDED TO CART",
+        className: "bg-green-400"
+      })
     }
 
 
