@@ -48,7 +48,7 @@ const useCartStore = create<Store>()(
         totalQuantity: () => get().items.reduce((total, item) => total + item.quantity, 0),
 
         totalPrice: () =>
-          get().items.reduce((total, item) => total + item.price, 0)
+          get().items.reduce((total, item) => total + (item.price*item.quantity), 0)
       
   }), { name: 'cart-storage' }
   )))
