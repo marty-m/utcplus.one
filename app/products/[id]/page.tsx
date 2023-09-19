@@ -70,7 +70,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 <div className="grid grid-cols-1 gap-y-5 border-x border-black ">
                 {imageURLs?.map((url) => {
                     return(
-                        <Image priority={true} placeholder="empty" alt={"Item image"} key={url}  src={url} width={590} height={590}></Image> 
+                        <Image priority placeholder="empty" alt={"Item image"} key={url}  src={url} width={590} height={590}></Image> 
 
                     );
                 })}
