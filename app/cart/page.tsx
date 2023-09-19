@@ -40,7 +40,7 @@ export default function CartPage() {
                 
             </Table>
             <div className="text-right">
-                <p className="">TOTAL: {totalPrice()}</p>
+                <p className="pb-2 pr-20 text-xl font-bold">TOTAL: ${totalPrice()}</p>
                 <Button asChild variant={"outline"} size={"lg"} className={items.length === 0? "hidden" :"text-lg font-medium py-7 rounded-none border-none bg-yellow-300 hover:bg-yellow-400"}>
                     <Link href="/cart/checkout"> CHECK OUTTTTT</Link>
                 </Button>    
