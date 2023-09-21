@@ -23,6 +23,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { ArrowLeft } from "lucide-react"
 
  
 const formSchema = z.object({
@@ -38,6 +39,7 @@ const formSchema = z.object({
 })
 
 export default function CheckoutPage() {
+    
     const {countries} = shipping;
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -56,15 +58,24 @@ export default function CheckoutPage() {
       })
     
     function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-        console.log(values)
+    alert({values})
+    document.getElementById('shipping').scrollIntoView({behavior: "smooth"})
+    console.log({values})
     }
+
+    function scrollToShipping(){
+        document.getElementById('shipping').scrollIntoView({behavior: "smooth"})
+    }
+
+    
     
     return (
-        <div className="h-full grid grid-cols-2 divide-x divide-black items-start">
+        <div className="h-full grid grid-cols-2 divide-x divide-black items-start overscroll-none overflow-hidden relative">
+            
+            <div className="h-full min-h-fit">
+            <div id="customerinfo" className="min-h-fit pb-96">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className=" overflow-auto grid grid-cols-2 gap-4 py-5 px-16">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4 py-5 pl-10 pr-16">
                 <div className="col-span-2 font-bold underline">Customer Details</div>
                     <FormField
                     control={form.control}
@@ -178,8 +189,8 @@ export default function CheckoutPage() {
                                     </FormControl>
                                     <SelectContent className="border border-black rounded-none h-44 overflow-y-auto">
                                         {countries.map((country) => (
-                                            <SelectItem key={country} value={country}>
-                                                {country}
+                                            <SelectItem key={country.code} value={country.code}>
+                                                {country.name}
                                             </SelectItem>
                                         ))}
                                     
@@ -193,7 +204,7 @@ export default function CheckoutPage() {
                         control={form.control}
                         name="mailingList"
                         render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-3 space-y-6 justify-center pt-1">
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-2 justify-center pt-2">
                             <FormControl>
                                 <Checkbox
                                 className="rounded-none "
@@ -209,13 +220,26 @@ export default function CheckoutPage() {
                             </FormItem>
                         )}
                         />
-                    <Button className="rounded-none col-span-2 mt-5" type="submit">To Shipping</Button>
+                    <Button className="rounded-none col-span-2 mt-5" type="button" onClick={scrollToShipping}>To Shipping</Button>
                 
                 </form>
             </Form>
+            </div>
+
+            <div id="shipping" className="h-full">
+                <div className="flex flex-col h-full">
+                <Button variant={"link"} className="text-left w-56 mt-5" onClick={() => {document.getElementById('customerinfo').scrollIntoView({behavior: "smooth"})}}><ArrowLeft strokeWidth={1.5} width={30} className="pr-2"/>Back to Customer Info</Button>
+                    <div className="flex flex-col h-full py-5 px-10">
+                        <h1 className="font-bold underline">Shipping</h1>
+                    </div>
+                </div>
+            </div>
+                
+        </div>
+            
 
 
-            <div className="overflow-auto flex flex-col h-full p-5">
+            <div className="fixed left-1/2 flex flex-col h-full p-5 -ml-6">
                 <h1>Orders</h1>
             </div>
         </div>
