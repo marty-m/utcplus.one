@@ -1,5 +1,6 @@
 "use client"
 import shipping from "@/lib/shipping.json"
+import { shippo, addressFrom } from "@/app/shippo_client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -58,9 +59,41 @@ export default function CheckoutPage() {
       })
     
     function onSubmit(values: z.infer<typeof formSchema>) {
-    alert({values})
-    document.getElementById('shipping').scrollIntoView({behavior: "smooth"})
-    console.log({values})
+        var addressTo = {
+            "name": values.firstName + " " + values.lastName,
+            "street1": values.address,
+            "city": values.city,
+            "state": "",
+            "zip": values.zip,
+            "country": values.country
+        };
+        var parcel = {
+            "length": "400",
+            "width": "300",
+            "height": "50",
+            "distance_unit": "mm",
+            "weight": "1",
+            "mass_unit": "kg"
+        };
+
+        shippo.shipment.create({
+            "address_from": addressFrom,
+            "address_to": addressTo,
+            "parcels": [parcel],
+            "async": false
+            }, function(err: any, shipment: any){
+            // asynchronously called
+            if(err){
+                console.log(err)
+            } else {
+                console.log(shipment)
+            }
+        });
+
+
+
+        document.getElementById('shipping').scrollIntoView({behavior: "smooth"})
+        console.log({values})
     }
 
     function scrollToShipping(){
@@ -72,10 +105,10 @@ export default function CheckoutPage() {
     return (
         <div className="h-full grid grid-cols-2 divide-x divide-black items-start overscroll-none overflow-hidden relative">
             
-            <div className="h-full min-h-fit">
-            <div id="customerinfo" className="min-h-fit pb-96">
+            <div className="h-full overscroll-none overflow-hidden">
+            <div id="customerinfo" className="h-full overflow-auto overscroll-auto">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4 py-5 pl-10 pr-16">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4 py-5 px-10 ">
                 <div className="col-span-2 font-bold underline">Customer Details</div>
                     <FormField
                     control={form.control}
@@ -220,7 +253,7 @@ export default function CheckoutPage() {
                             </FormItem>
                         )}
                         />
-                    <Button className="rounded-none col-span-2 mt-5" type="button" onClick={scrollToShipping}>To Shipping</Button>
+                    <Button className="rounded-none col-span-2 mt-5" type="submit">To Shipping</Button>
                 
                 </form>
             </Form>
@@ -228,7 +261,12 @@ export default function CheckoutPage() {
 
             <div id="shipping" className="h-full">
                 <div className="flex flex-col h-full">
-                <Button variant={"link"} className="text-left w-56 mt-5" onClick={() => {document.getElementById('customerinfo').scrollIntoView({behavior: "smooth"})}}><ArrowLeft strokeWidth={1.5} width={30} className="pr-2"/>Back to Customer Info</Button>
+                <Button variant={"link"} className="text-left w-56 mt-5" onClick={() => {
+                    form.reset()
+                    document.getElementById('customerinfo').scrollIntoView({behavior: "smooth"})
+
+                    
+                    }}><ArrowLeft strokeWidth={1.5} width={30} className="pr-2"/>Back to Customer Info</Button>
                     <div className="flex flex-col h-full py-5 px-10">
                         <h1 className="font-bold underline">Shipping</h1>
                     </div>
@@ -239,7 +277,7 @@ export default function CheckoutPage() {
             
 
 
-            <div className="fixed left-1/2 flex flex-col h-full p-5 -ml-6">
+            <div className="fixed left-1/2 flex flex-col h-full py-5 px-10">
                 <h1>Orders</h1>
             </div>
         </div>
