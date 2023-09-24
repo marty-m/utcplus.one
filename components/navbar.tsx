@@ -26,7 +26,7 @@ export default function Navbar() {
             <NavSheet/>
           </NavigationMenuItem>
 
-          <NavigationMenuItem className="">
+          <NavigationMenuItem className="pl-12">
             
             <Link href='/'>
               <Image src={"/utcplusoneblack.svg"} alt="UTC+1 Logo" width={100} height={100}/>
