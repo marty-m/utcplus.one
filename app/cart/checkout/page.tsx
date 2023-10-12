@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -40,7 +39,6 @@ const formSchema = z.object({
 })
 
 export default function CheckoutPage() {
-    
     const {countries} = shipping;
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -67,28 +65,7 @@ export default function CheckoutPage() {
             "zip": values.zip,
             "country": values.country
         };
-        var parcel = {
-            "length": "400",
-            "width": "300",
-            "height": "50",
-            "distance_unit": "mm",
-            "weight": "1",
-            "mass_unit": "kg"
-        };
-
-        shippo.shipment.create({
-            "address_from": addressFrom,
-            "address_to": addressTo,
-            "parcels": [parcel],
-            "async": false
-            }, function(err: any, shipment: any){
-            // asynchronously called
-            if(err){
-                console.log(err)
-            } else {
-                console.log(shipment)
-            }
-        });
+        
 
 
 
