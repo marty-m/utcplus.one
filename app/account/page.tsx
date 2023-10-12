@@ -1,7 +1,5 @@
 'use client'
 
-import useLoggedInRedir from "../hooks/useLoggedInRedir";
-import { useRouter } from "next/navigation";
 import { pb } from "../pocketbase";
 import { useEffect } from "react";
 import useVerified from "../hooks/useVerified";
@@ -24,11 +22,7 @@ export default function Account(){
         authRefresh();
     }, [])
 
-    const {isLoggedIn} = useLoggedInRedir();
-    const router = useRouter();
-    if (!isLoggedIn){
-        router.push('/');
-    }
+   
     const {isVerified} = useVerified();
     const model = pb.authStore.model;
     const date = new Date(model.created)
