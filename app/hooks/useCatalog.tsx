@@ -1,6 +1,8 @@
 import { client } from "@/app/square_client";
 import useInventory from "./useInventory";
 import { Variations } from "@/lib/types";
+import { pb } from "@/app/pocketbase";
+import { Record } from "pocketbase";
 
 
 export const dynamic = 'auto',
@@ -17,19 +19,14 @@ export default function useCatalog() {
 
 async function getAllCatalogObjIDs(){
     try {
-      const response = await client.catalogApi.searchCatalogItems({
-        sortOrder: 'DESC',
-        productTypes: [
-          'REGULAR'
-        ]
-      });
+      const records = await pb.collection('products').getFullList({
+        fields: 'id',
+    });
       var itemObjectIds: string[] = [];
-      response.result.items.forEach((object: any) => {
-        if (object.type == "ITEM"){
-          itemObjectIds.push(object.id);
-        }
-      });
       
+      for (const record of records){
+        itemObjectIds.push(record.id);
+      }
       return itemObjectIds;
       }
     catch(error) {
@@ -39,13 +36,13 @@ async function getAllCatalogObjIDs(){
 
 async function getDetails(itemId: string){
     try {
-        const response = await client.catalogApi.retrieveCatalogObject(itemId);
-        
-        const prodID = response.result.object.id;
-        const name = response.result.object.itemData.name;
-        const description = response.result.object.itemData.description;
-        const price = Number(response.result.object.itemData.variations[0].itemVariationData.priceMoney.amount)/100;
-        const currency = response.result.object.itemData.variations[0].itemVariationData.priceMoney.currency;
+        const response = await pb.collection('products').getFirstListItem(`id = '${itemId}'`);
+  
+        const prodID = response.id;
+        const name = response.name;
+        const description = response.description;
+        const price = response.price;
+        const currency = response.currency;
 
         return {prodID, name, description, price, currency};
 
@@ -56,14 +53,12 @@ async function getDetails(itemId: string){
   
 async function getAllImageURLs(itemObjectId:string){    
   try {
-    const response = await client.catalogApi.retrieveCatalogObject(itemObjectId, true);
-    var imageIDs = response.result.object.itemData.imageIds;
     var imageURLs:string[] = [];
+    const record = await pb.collection('products').getOne(itemObjectId);
+    for (const filename of record.images){
 
-    for (const imageID of imageIDs){
-      const imageResponse = await client.catalogApi.retrieveCatalogObject(imageID,false);
-
-      imageURLs.push(imageResponse.result.object.imageData.url);
+      const url = await pb.files.getUrl(record, filename);
+      imageURLs.push(url);
     }
 
     return imageURLs
@@ -73,10 +68,16 @@ async function getAllImageURLs(itemObjectId:string){
   }
 }
 
+
 async function getAllVariationObjects(itemId:string){
   try {
-    const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
-    return response.result.object.itemData.variations;
+    const record = await pb.collection('products').getOne(itemId);
+    const variationObjects: Record[] = [];
+    for (const variation of record.variations){
+      const varRecord = await pb.collection('variations').getOne(variation);
+      variationObjects.push(varRecord);
+    }
+    return variationObjects;
   } catch (error) {
     console.log(error)
   }
@@ -98,68 +99,57 @@ async function getAllColorSizeVariations(itemId:string){
     */
 
   try{
-    const {isInStock} = useInventory();
     const variationObjects = await getAllVariationObjects(itemId);
+    
+    const variationPageURLs:string[] = [];
     const variations:Variations = Object.create({});
     const colorKeys:string[] = [];
     
+    for (const variation of variationObjects!){
+      
+      const variation_id = variation.id;
+      const colorKey = variation.color;
+      const size = variation.size;
+      const imageURLs = await getAllImageURLs(itemId);
+      const inStock = variation.stock > 0;
 
-      for (var i = 0; i < variationObjects.length; i++){
-        const variationObject = variationObjects[i];
-        const colorKey:string = variationObject.itemVariationData.name.split(", ")[0];
-        const size:string = variationObject.itemVariationData.name.split(", ")[1];
-        
-        const variation_id = variationObject.id;
-
-        const inStock = await isInStock(variation_id);
-
-        
-        const variationImageURLs:string[] = []
-        const response = await client.catalogApi.retrieveCatalogObject(variation_id, true)
-        for (const relatedObject of response.result.relatedObjects) {
-          if (relatedObject.type == "IMAGE") {
-            variationImageURLs.push(relatedObject.imageData.url);
-          }
-        }
-        
-        
-        if (!variations[colorKey]){
-          variations[colorKey] = [];
-        }
-        if (!colorKeys.includes(colorKey)){
-          colorKeys.push(colorKey);
-        }
-        
-        variations[colorKey].push({size:size, variation_id:variation_id, inStock:inStock!, imageURLs:variationImageURLs})
-        
+      if (!variations[colorKey]){
+        variations[colorKey] = [];
       }
-    return {variations, colorKeys};
+      if (!colorKeys.includes(colorKey)){
+        colorKeys.push(colorKey);
+      }
 
+      variations[colorKey].push({size:size, variation_id:variation_id, inStock:inStock!, imageURLs:imageURLs!})
+      console.log(variations)
+    }
     
-    
+
+    return {variations, colorKeys};
 
   } catch(error){
     console.log(error)
   }
 }
 
-async function getChosenVariationId(itemId:string, chosenVariation:string[]){
-  try {
-    const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
+// // Redundant as of right now
+// async function getChosenVariationId(itemId:string, chosenVariation:string[]){
+//   try {
+//     const response = await client.catalogApi.retrieveCatalogObject(itemId, false);
 
-    const chosenVariationName = chosenVariation.join(", ");
+//     const chosenVariationName = chosenVariation.join(", ");
 
-    var itemVariationObjects = response.result.object.itemData.variations;
-    for (const variationObject of itemVariationObjects){
-        if (chosenVariationName == variationObject.itemVariationData.name){
-          return variationObject.id;
-        }
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
+//     var itemVariationObjects = response.result.object.itemData.variations;
+//     for (const variationObject of itemVariationObjects){
+//         if (chosenVariationName == variationObject.itemVariationData.name){
+//           return variationObject.id;
+//         }
+//     }
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
 
-return {getAllCatalogObjIDs, getDetails, getAllImageURLs, getAllColorSizeVariations, getChosenVariationId}
+return {getAllCatalogObjIDs, getDetails, getAllImageURLs, getAllColorSizeVariations};
 
 }
