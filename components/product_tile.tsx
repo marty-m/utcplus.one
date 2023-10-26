@@ -13,7 +13,7 @@ export default async function ProductTile(id: string){
                 </div>
                 <div className="flow-root font-thin py-1 border border-black border-t-transparent">
                     <p className="text-left text-sm float-left pl-2">{item?.name.toUpperCase()}</p>
-                    <p className="text-right text-sm float-right pr-2">{item?.price} USD</p>
+                    <p className="text-right text-sm float-right pr-2">{item?.price} {item?.currency}</p>
                 </div>
             </a>
     )
