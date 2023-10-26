@@ -1,11 +1,16 @@
 import { client } from "@/app/square_client";
+import { pb } from "@/app/pocketbase";
 
 export default function useInventory(){
-    async function isInStock(itemId?:string){
+    async function isInStock(itemId:string){
 
     try {
-        const response = await client.inventoryApi.retrieveInventoryCount(itemId);
-        const isInStock = (response.result.counts[0]).quantity > 0;
+
+        const record = await pb.collection('variations').getOne(itemId, {
+            fields: 'stock',
+        });
+
+        const isInStock = record.stock > 0;
         return isInStock;
     } catch (error) {
         console.log(error)
