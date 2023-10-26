@@ -3,10 +3,10 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'items-images-production.s3.us-west-2.amazonaws.com',
-                port: '',
-                pathname: '/files/**',
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '8090',
+                pathname: '/api/**',
             },
         ],
     },
